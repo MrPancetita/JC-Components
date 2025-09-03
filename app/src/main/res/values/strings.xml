@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name" translatable="false">XML Components</string>
+    <string name="title_black_friday">Black Friday</string>
+    <string name="large_description" translatable="false">Lorem ipsum dolor sit amet consectetur adipiscing elit augue, montes vulputate nulla scelerisque suscipit libero et vestibulum, rutrum ultricies euismod sodales id nisi sociosqu. Curae justo feugiat non sagittis duis pellentesque natoque dictumst aliquam himenaeos, cras sociosqu ullamcorper lobortis nullam erat id risus. Mauris augue justo ullamcorper dignissim blandit cursus porta pulvinar laoreet hendrerit risus, sem turpis vitae urna magna natoque etiam tristique senectus primis lobortis parturient, sodales auctor nam aliquam tortor cubilia at tempus nibh vehicula. Platea dictum cursus quis per egestas tellus sem nunc primis, enim eu tempor in natoque ullamcorper netus quisque litora, urna ad risus et conubia praesent mi odio. Id nisl quis interdum ad neque, vestibulum nisi orci felis vehicula, scelerisque a bibendum purus. Cum purus quis tortor netus class at litora ante semper rhoncus, vivamus libero euismod nascetur hac feugiat erat cras porta.</string>
+
+    <string name="btn_buy">Buy</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_red">Red</string>
+    <string name="btn_green">Green</string>
+    <string name="btn_blue">Blue</string>
+
+    <string name="hint_email" translatable="false">email</string>
+    <string name="hint_image_url" translatable="false">image_url</string>
+    <string name="hint_password" translatable="false">password</string>
+
+    <string name="cb_enable_password" translatable="false">Enable Password</string>
+    <string name="sw_hide_fab" translatable="false">Hide Fab</string>
+    <string name="sw_show_fab" translatable="false">Show Fab</string>
+    <string name="common_ok" translatable="false">OK</string>
+    <string name="common_skip">Skip</string>
+    <string name="common_cancel" translatable="false">Cancel</string>
+
+    <string name="sld_value" translatable="false">Vol: %.1f</string>
+
+    <string name="message_buyed">Bought!</string>
+    <string name="message_record" translatable="false">Historial</string>
+    <string name="helper_text_required" translatable="false">Required</string>
+    <string name="error_invalid_url" translatable="false">Invalid  URL</string>
+    <string name="dialog_title" translatable="false">Notifications</string>
+    <string name="dialog_message" translatable="false">Today activity</string>
+    <string name="message_bye" translatable="false">Hasta pronto!</string>
+    <string name="message_success_event">Success!</string>
+    <string name="action_go">Go</string>
+
+
+</resources>

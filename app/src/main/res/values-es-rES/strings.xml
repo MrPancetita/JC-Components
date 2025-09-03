@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_black_friday">Black Friday</string>
+    <string name="btn_buy">Comprar</string>
+    <string name="btn_skip">Saltar</string>
+    <string name="btn_red">Rojo</string>
+    <string name="btn_green">Verde</string>
+    <string name="btn_blue">Azul</string>
+    <string name="common_skip">Saltar</string>
+    <string name="message_success_event">Evento exitoso</string>
+    <string name="message_buyed">Comprado</string>
+    <string name="action_go">Ir</string>
+</resources>
