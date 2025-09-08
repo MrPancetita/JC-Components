@@ -1,14 +1,20 @@
 package com.example.jccomponents
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -16,8 +22,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -34,18 +44,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JCComponentsTheme {
-                ContentMain()
+                ContentMain {
+                    finish()
+                }
             }
         }
     }
 }
 
 @Composable
-fun ContentMain() {
-    val colorBar = LocalContext.current.getColor(R.color.purple_200)
+fun ContentMain(onFinish: ()-> Unit) {
+    val context = LocalContext.current
+    val colorBar = context.getColor(R.color.purple_200)
     //Snackbar
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    //Menu
+    var expandedMenu by remember { mutableStateOf(false) }
 
 
     Scaffold(modifier = Modifier.fillMaxSize(),
@@ -62,6 +77,35 @@ fun ContentMain() {
                         Icon(Icons.Filled.Menu,
                             contentDescription = "Menu") }
                 }
+                Spacer(Modifier.weight(1f, true))  // Mueve los 3 puntos a la derecha
+                Box {
+                    val msgBye = stringResource(R.string.message_bye)
+                    val exitStr = stringResource(R.string.action_exit)
+                    IconButton(onClick = {
+                        expandedMenu = true
+                    })
+                    {
+                        Icon(Icons.Filled.MoreVert,
+                            contentDescription = "Options")
+                    }
+
+                    DropdownMenu(expanded = expandedMenu,
+                        onDismissRequest = {expandedMenu = false}
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(exitStr) },
+                            onClick = {
+                                expandedMenu = false
+                                Toast.makeText(context, msgBye, Toast.LENGTH_SHORT).show()
+                                onFinish()
+                            }
+                        )
+                    }
+
+                }
+
+
+
         }
         }) { innerPadding ->
         ContentView(Modifier.padding(innerPadding))
@@ -72,6 +116,6 @@ fun ContentMain() {
 @Composable
 fun GreetingPreview() {
     JCComponentsTheme {
-        ContentMain()
+        ContentMain{}
     }
 }
