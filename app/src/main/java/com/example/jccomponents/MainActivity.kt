@@ -5,6 +5,10 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.estimateAnimationDurationMillis
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -61,6 +68,10 @@ fun ContentMain(onFinish: ()-> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     //Menu
     var expandedMenu by remember { mutableStateOf(false) }
+    //FloationActionButton
+    var fabPosition by remember { mutableStateOf(FabPosition.End) }
+    var showFab by remember { mutableStateOf(true)}
+
 
 
     Scaffold(modifier = Modifier.fillMaxSize(),
@@ -103,12 +114,47 @@ fun ContentMain(onFinish: ()-> Unit) {
                     }
 
                 }
+            }
 
-
+        },
+        floatingActionButton = {
+            AnimatedVisibility(visible = showFab,
+                enter = scaleIn(),
+                exit = scaleOut()
+            ) {
+                FloatingActionButton(onClick = {
+                    fabPosition = if (fabPosition == FabPosition.End) {
+                        FabPosition.Center
+                    } else {
+                        FabPosition.End
+                    }
+                }) {
+                    Icon(
+                        Icons.Default.SwapHoriz,
+                        contentDescription = null
+                    )
+                }
+            }
+            /*if (showFab) {
+                FloatingActionButton(onClick = {
+                    fabPosition = if (fabPosition == FabPosition.End) {
+                        FabPosition.Center
+                    } else {
+                        FabPosition.End
+                    }
+                }) {
+                    Icon(
+                        Icons.Default.SwapHoriz,
+                        contentDescription = null
+                    )
+                }
+            }*/
+        },
+        floatingActionButtonPosition = fabPosition) { innerPadding ->
+        ContentView(Modifier.padding(innerPadding)) { isSwitchChecked ->
+            showFab = isSwitchChecked
 
         }
-        }) { innerPadding ->
-        ContentView(Modifier.padding(innerPadding))
     }
 }
 
