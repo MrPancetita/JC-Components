@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalGlideComposeApi::class)
+
 package com.example.jccomponents
 
 import android.graphics.Bitmap
@@ -6,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +40,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.jccomponents.ui.theme.JCComponentsTheme
 
 /**
@@ -64,7 +69,7 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
     Column(modifier
         .verticalScroll(rememberScrollState())) {
         var isSwitchChecked by remember { mutableStateOf(true) }
-        //var isSkiped by remember {mutableStateOf(false)}
+        var isSkipped by remember {mutableStateOf(false)}
 
         Text(text = stringResource(if(isSwitchChecked) R.string.sw_hide_fab else R.string.sw_show_fab))
         Switch(
@@ -74,75 +79,102 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
                 onContentEvent(isSwitchChecked)
             })
 
-        Card(Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.common_padding_default))) {
-            ConstraintLayout(Modifier
-                .fillMaxWidth()
-                .padding(start = dimensionResource(R.dimen.common_padding_default),
-                    end = dimensionResource(R.dimen.common_padding_default),
-                    top = dimensionResource(R.dimen.common_padding_default))) {
+        if (!isSkipped) {
+            Card(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.common_padding_default))
+            ) {
+                ConstraintLayout(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = dimensionResource(R.dimen.common_padding_default),
+                            end = dimensionResource(R.dimen.common_padding_default),
+                            top = dimensionResource(R.dimen.common_padding_default)
+                        )
+                ) {
 
-                val (imgCard, tvTitle, tvDescription, btnBuy, btnSkip) = createRefs()
+                    val (imgCard, tvTitle, tvDescription, btnBuy, btnSkip) = createRefs()
 
-                val image = ContextCompat.getDrawable(LocalContext.current, R.drawable.angry_doge)
-                Image(bitmap = image!!.toBitmap().asImageBitmap(),
-                    contentDescription = "doge angry",
-                    modifier = Modifier
-                        .constrainAs(imgCard) {
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
+                    val image =
+                        ContextCompat.getDrawable(LocalContext.current, R.drawable.angry_doge)
+                    Image(
+                        bitmap = image!!.toBitmap().asImageBitmap(),
+                        contentDescription = "doge angry",
+                        modifier = Modifier
+                            .constrainAs(imgCard) {
+                                start.linkTo(parent.start)
+                                top.linkTo(parent.top)
 
-                        }
-                        .size(dimensionResource(R.dimen.img_size))
-                        .background(Color.Cyan)
-                )
-                val paddingDefault = dimensionResource(R.dimen.common_padding_default)
-                Text(stringResource(R.string.title_black_friday),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier
-                        .constrainAs(tvTitle) {
-                            start.linkTo(imgCard.end, margin = paddingDefault)
-                            end.linkTo(parent.end)
-                            top.linkTo(imgCard.top)
-                            width = Dimension.fillToConstraints
-                        })
-                Text(stringResource(R.string.large_description),
-                    style=MaterialTheme.typography.bodySmall,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .constrainAs(tvDescription) {
-                            start.linkTo(tvTitle.start)
-                            end.linkTo(tvTitle.end)
-                            top.linkTo(tvTitle.bottom)
-                            bottom.linkTo(imgCard.bottom)
-                            width = Dimension.fillToConstraints
-                        })
-                Button(onClick = {},
-                    modifier = Modifier
-                        .constrainAs(btnBuy) {
-                            end.linkTo(parent.end)
-                            top.linkTo(tvDescription.bottom)
+                            }
+                            .size(dimensionResource(R.dimen.img_size))
+                            .background(Color.Cyan)
+                    )
+                    val paddingDefault = dimensionResource(R.dimen.common_padding_default)
+                    Text(
+                        stringResource(R.string.title_black_friday),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier
+                            .constrainAs(tvTitle) {
+                                start.linkTo(imgCard.end, margin = paddingDefault)
+                                end.linkTo(parent.end)
+                                top.linkTo(imgCard.top)
+                                width = Dimension.fillToConstraints
+                            })
+                    Text(
+                        stringResource(R.string.large_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .constrainAs(tvDescription) {
+                                start.linkTo(tvTitle.start)
+                                end.linkTo(tvTitle.end)
+                                top.linkTo(tvTitle.bottom)
+                                bottom.linkTo(imgCard.bottom)
+                                width = Dimension.fillToConstraints
+                            })
+                    Button(
+                        onClick = {},
+                        modifier = Modifier
+                            .constrainAs(btnBuy) {
+                                end.linkTo(parent.end)
+                                top.linkTo(tvDescription.bottom)
 
-                        }) {
-                    Icon(Icons.Default.Shop, "buy button")
-                    Text(stringResource(R.string.btn_buy))
+                            }) {
+                        Icon(Icons.Default.Shop, "buy button")
+                        Text(stringResource(R.string.btn_buy))
+                    }
+                    TextButton(
+                        onClick = {
+                            isSkipped = true
+                        },
+                        modifier = Modifier
+                            .constrainAs(btnSkip) {
+                                end.linkTo(btnBuy.start)
+                                top.linkTo(btnBuy.top)
+                            }) {
+                        Text(stringResource(R.string.btn_skip))
+                    }
                 }
-                TextButton( onClick = {
 
-                },
-                    modifier = Modifier
-                        .constrainAs(btnSkip){
-                            end.linkTo(btnBuy.start)
-                            top.linkTo(btnBuy.top)
-                        }) {
-                    Text(stringResource(R.string.btn_skip))
-                }
             }
-
         }
 
+        var urlValue by remember { mutableStateOf("https://ae-pic-a1.aliexpress-media.com/kf/S4ccab0751a844afeaac2337ad2c6b34aT.jpg_220x220q75.jpg_.avif") }
+        Card(Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.common_padding_min)))
+        {
+            GlideImage(
+                model = urlValue,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(R.dimen.img_cover_height))
+            )
+        }
     }
 
 }
