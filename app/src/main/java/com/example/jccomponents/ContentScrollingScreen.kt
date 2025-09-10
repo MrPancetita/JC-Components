@@ -6,20 +6,24 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -172,17 +177,54 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.common_padding_min)))
         {
-            GlideImage(
-                model = urlValue,
-                contentDescription = null,
-                modifier = Modifier
+            ConstraintLayout {
+                val (imgUrl, cForm) = createRefs()
+                GlideImage(
+                    model = urlValue,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .constrainAs(imgUrl) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                        }
+                        .fillMaxWidth()
+                        .height(dimensionResource(R.dimen.img_cover_height))
+                        .background(colorResource(R.color.yellow_500)),
+                    loading = placeholder(R.drawable.ic_baseline_timer_24),
+                    failure = placeholder(R.drawable.ic_baseline_broken_image_24),
+                    contentScale = ContentScale.Crop
+                )
+                
+                Column (Modifier
+                    .constrainAs(cForm) {
+                        top.linkTo(imgUrl.bottom)
+                    }
                     .fillMaxWidth()
-                    .height(dimensionResource(R.dimen.img_cover_height))
-                    .background(colorResource(R.color.yellow_500)),
-                loading = placeholder(R.drawable.ic_baseline_timer_24),
-                failure = placeholder(R.drawable.ic_baseline_broken_image_24),
-                contentScale = ContentScale.Crop
-            )
+                    .padding(dimensionResource(R.dimen.common_padding_default))){
+                    Text(
+                        stringResource(R.string.title_black_friday),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier
+                            .fillMaxWidth())
+
+                    var emailValue by remember { mutableStateOf("")}
+                    OutlinedTextField(value = emailValue,
+                        onValueChange = {emailValue = it},
+                        modifier = Modifier
+                            .padding(dimensionResource(R.dimen.common_padding_default)),
+                        label = { Text(stringResource(R.string.hint_email))},
+                        trailingIcon = {
+                            if (emailValue.isNotEmpty()) {
+                                Icon(Icons.Default.Clear,
+                                    null,
+                                    modifier = Modifier.clickable { emailValue = "" })
+                            }},
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    )
+                }
+            }
         }
     }
 }
