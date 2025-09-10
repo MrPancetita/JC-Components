@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Shop
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -30,7 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,6 +46,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.example.jccomponents.ui.theme.JCComponentsTheme
 
 /**
@@ -173,8 +178,13 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(dimensionResource(R.dimen.img_cover_height))
+                    .background(colorResource(R.color.yellow_500)),
+                loading = placeholder(R.drawable.ic_baseline_timer_24),
+                failure = placeholder(R.drawable.ic_baseline_broken_image_24),
+                contentScale = ContentScale.Crop
             )
         }
     }
-
 }
+
+
