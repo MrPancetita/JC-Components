@@ -27,11 +27,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Umbrella
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
@@ -93,14 +97,14 @@ import com.example.jccomponents.ui.theme.JCComponentsTheme
 private fun ContentPreview()
 {
     JCComponentsTheme {
-        ContentView(Modifier) { }
+        ContentView(Modifier) { _, _, _ -> }
     }
 
 }
 
 
 @Composable
-fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
+fun ContentView(modifier: Modifier, onContentEvent: (String?, Boolean?, Boolean?) -> Unit) {
 
     var isSkipped by remember {mutableStateOf(false)}
     var colorMain by remember { mutableStateOf(Color.Transparent) }
@@ -165,8 +169,9 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
                                 bottom.linkTo(imgCard.bottom)
                                 width = Dimension.fillToConstraints
                             })
+                    val buyMsg = stringResource(R.string.btn_buy)
                     Button(
-                        onClick = {},
+                        onClick = { onContentEvent (buyMsg, null, null)},
                         modifier = Modifier
                             .constrainAs(btnBuy) {
                                 end.linkTo(parent.end)
@@ -174,7 +179,7 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
 
                             }) {
                         Icon(Icons.Default.Shop, "buy button")
-                        Text(stringResource(R.string.btn_buy))
+                        Text(buyMsg)
                     }
                     TextButton(
                         onClick = {
@@ -320,7 +325,7 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
                             checked = isSwitchChecked,
                             onCheckedChange = { currentValue ->
                                 isSwitchChecked = currentValue
-                                onContentEvent(isSwitchChecked)
+                                onContentEvent(null, isSwitchChecked, null)
                             })
                     }
 
@@ -432,6 +437,42 @@ fun ContentView(modifier: Modifier, onContentEvent: (Boolean) -> Unit) {
                             }
                         }
                     }
+
+                    var count by remember { mutableStateOf(21) }
+                    BadgedBox(
+                        modifier = Modifier
+                            .padding(top = dimensionResource(R.dimen.common_padding_default)),
+                        badge = {
+                            if (count > 0) {
+                                Badge{
+                                    Text("$count")
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "Notifications icon",
+                            modifier = Modifier
+                                .clickable {
+                                    onContentEvent(null, null, true)
+
+                                })
+                    }
+
+                    Box(Modifier
+                        .fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd) {
+                        Button(onClick = { count++ },
+                            modifier = Modifier
+                                .padding(vertical = dimensionResource(R.dimen.common_padding_default))) {
+                            Text(stringResource(R.string.common_ok))
+                        }
+                    }
+
+
+
+
 
 
 
